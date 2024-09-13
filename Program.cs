@@ -32,6 +32,14 @@ namespace Final.Project.Heavy.Armor.List
         }
 
         public abstract string GetDescription();
+        public virtual void PrintDetails()
+        {
+            Console.WriteLine($"Weight: {Weight}");
+            Console.WriteLine($"Engine Power: {EnginePower} HP");
+            Console.WriteLine($"Crew Member Count: {CrewMemberCount}");
+            Console.WriteLine($"Power Reserve: {PowerReserve} km");
+            Console.WriteLine($"Max Speed: {MaxSpeed} km/h");
+        }
     }
 
     class MBT : HeavyArmorUnit
@@ -49,6 +57,11 @@ namespace Final.Project.Heavy.Armor.List
         public override string GetDescription()
         {
             return $"Main battle tank - {Type}, Main gun caliber: {MainGunCaliber}mm";
+        }
+        public override void PrintDetails()
+        {
+            base.PrintDetails();
+            Console.WriteLine($"Main Gun Caliber: {MainGunCaliber} mm");
         }
     }
 
@@ -68,6 +81,11 @@ namespace Final.Project.Heavy.Armor.List
         {
             return $"Armored personal carrier - {Type}, Passenger capacity: {PassengerCapacity}";
         }
+        public override void PrintDetails()
+        {
+            base.PrintDetails();
+            Console.WriteLine($"Passenger capacity: {PassengerCapacity}");
+        }
     }
 
     class TankDestroyer : HeavyArmorUnit
@@ -86,6 +104,12 @@ namespace Final.Project.Heavy.Armor.List
         {
             return $"Tank Destroyer - {Type}, Gun caliber: {GunCaliber}mm";
         }
+        public override void PrintDetails()
+        {
+            base.PrintDetails();
+            Console.WriteLine($"Gun caliber: {GunCaliber}mm");
+        }
+
     }
 
     class ARV : HeavyArmorUnit
@@ -103,6 +127,11 @@ namespace Final.Project.Heavy.Armor.List
         public override string GetDescription()
         {
             return $"Armored Recovery Vehicle - {Type}, Towing capacity: {TowingCapacity} tons";
+        }
+        public override void PrintDetails()
+        {
+            base.PrintDetails();
+            Console.WriteLine($"Towing capacity: {TowingCapacity} tons");
         }
     }
 
@@ -122,6 +151,11 @@ namespace Final.Project.Heavy.Armor.List
         {
             return $"Amphibious Assault Vehicle - {Type}, Water speed: {WaterSpeed} km/h";
         }
+        public override void PrintDetails()
+        {
+            base.PrintDetails();
+            Console.WriteLine($" Water speed: {WaterSpeed} km/h");
+        }
     }
 
     class MLRS : HeavyArmorUnit
@@ -139,6 +173,11 @@ namespace Final.Project.Heavy.Armor.List
         public override string GetDescription()
         {
             return $"Multi-launch rocket system - {Type}, Rocket count: {RocketCount}";
+        }
+        public override void PrintDetails()
+        {
+            base.PrintDetails();
+            Console.WriteLine($"Rocket count: {RocketCount}");
         }
     }
 
@@ -158,6 +197,11 @@ namespace Final.Project.Heavy.Armor.List
         {
             return $"Self-Propelled Gun - {Type}, Cannon caliber: {CannonCaliber}mm";
         }
+        public override void PrintDetails()
+        {
+            base.PrintDetails();
+            Console.WriteLine($"Cannon caliber: {CannonCaliber}mm");
+        }
     }
 
     class IFV : HeavyArmorUnit
@@ -175,6 +219,11 @@ namespace Final.Project.Heavy.Armor.List
         public override string GetDescription()
         {
             return $"Infantry Fighting Vehicle - {Type}, Has anti-tank missiles: {HasAntiTankMissiles}";
+        }
+        public override void PrintDetails()
+        {
+            base.PrintDetails();
+            Console.WriteLine($"Has anti-tank missiles: {HasAntiTankMissiles}");
         }
     }
 
@@ -194,11 +243,12 @@ namespace Final.Project.Heavy.Armor.List
             {
                 Console.WriteLine("1. Create new unit");
                 Console.WriteLine("2. Showcase all units");
-                Console.WriteLine("3. Save all units description to file");
-                Console.WriteLine("4. Load units description from file");
-                Console.WriteLine("5. Sort units");
-                Console.WriteLine("6. View/Edit/Delete specific unit");
-                Console.WriteLine("7. Exit");
+                Console.WriteLine("3. View unit details");
+                Console.WriteLine("4. Save all units description to file");
+                Console.WriteLine("5. Load units description from file");
+                Console.WriteLine("6. Sort units");
+                Console.WriteLine("7. View/Edit/Delete specific unit");
+                Console.WriteLine("8. Exit");
 
                 Console.Write("Select option: ");
                 int menuItem = Convert.ToInt32(Console.ReadLine());
@@ -211,18 +261,21 @@ namespace Final.Project.Heavy.Armor.List
                         PrintAllUnits();
                         break;
                     case 3:
-                        SaveAllUnitsInformation();
+                        ViewUnitDetailsMenu();
                         break;
                     case 4:
-                        LoadAllUnitsInformation();
+                        SaveAllUnitsInformation();
                         break;
                     case 5:
-                        SortUnitsMenu();
+                        LoadAllUnitsInformation();
                         break;
                     case 6:
-                        ViewEditDeleteUnitMenu();
+                        SortUnitsMenu();
                         break;
                     case 7:
+                        ViewEditDeleteUnitMenu();
+                        break;
+                    case 8:
                         Console.WriteLine("Exiting program.");
                         return;
                     default:
@@ -268,7 +321,7 @@ namespace Final.Project.Heavy.Armor.List
             }
         }
 
-        // Сортування за вагою
+        // Методи сортування
         private static void SortUnitsByWeight(string sortOrder)
         {
             heavyUnit.Sort((x, y) => sortOrder == "asc" ? x.Weight.CompareTo(y.Weight) : y.Weight.CompareTo(x.Weight));
@@ -305,6 +358,31 @@ namespace Final.Project.Heavy.Armor.List
         }
 
         // Меню перегляду, редагування та видалення одиниць техніки
+        private static void ViewUnitDetailsMenu()
+        {
+            if (heavyUnit.Count == 0)
+            {
+                Console.WriteLine("No units available.");
+                return;
+            }
+
+            Console.WriteLine("Enter the index of the unit to view details (starting from 0):");
+            int index = GetValidInteger("Index: ");
+
+            if (index < 0 || index >= heavyUnit.Count)
+            {
+                Console.WriteLine("Invalid index.");
+                return;
+            }
+
+            HeavyArmorUnit selectedUnit = heavyUnit[index];
+
+            // Відображення назви техніки
+            Console.WriteLine($"\nUnit {index + 1}: {selectedUnit.GetDescription()}");
+
+            // Відображення всіх характеристик
+            selectedUnit.PrintDetails();
+        }
         private static void ViewEditDeleteUnitMenu()
         {
             Console.WriteLine("Enter the index of the unit to view/edit/delete: ");
