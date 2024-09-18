@@ -34,7 +34,7 @@ namespace Final.Project.Heavy.Armor.List
         public abstract string GetDescription();
         public virtual void PrintDetails()
         {
-            Console.WriteLine($"Weight: {Weight}");
+            Console.WriteLine($"Weight: {Weight} t");
             Console.WriteLine($"Engine Power: {EnginePower} HP");
             Console.WriteLine($"Crew Member Count: {CrewMemberCount}");
             Console.WriteLine($"Power Reserve: {PowerReserve} km");
@@ -184,23 +184,23 @@ namespace Final.Project.Heavy.Armor.List
     class SPG : HeavyArmorUnit
     {
         public string Type { get; set; }
-        public double CannonCaliber { get; set; }
+        public double MaxFireRange { get; set; }
 
-        public SPG(double weight, double enginePower, double crewMemberCount, double powerReserve, string type, double cannonCaliber, double maxSpeed)
+        public SPG(double weight, double enginePower, double crewMemberCount, double powerReserve, string type, double maxFireRange, double maxSpeed)
             : base(weight, enginePower, crewMemberCount, powerReserve, maxSpeed)
         {
             Type = type;
-            CannonCaliber = cannonCaliber;
+            MaxFireRange = maxFireRange;
         }
 
         public override string GetDescription()
         {
-            return $"Self-Propelled Gun - {Type}, Cannon caliber: {CannonCaliber}mm";
+            return $"Self-Propelled Gun - {Type}, Max fire Range: {MaxFireRange}km";
         }
         public override void PrintDetails()
         {
             base.PrintDetails();
-            Console.WriteLine($"Cannon caliber: {CannonCaliber}mm");
+            Console.WriteLine($"Max fire range: {MaxFireRange}mm");
         }
     }
 
@@ -532,7 +532,7 @@ namespace Final.Project.Heavy.Armor.List
                         2 => new APC(weight, enginePower, crewCount, powerReserve, type, GetValidInteger("Enter passenger capacity: "), maxSpeed),
                         3 => new MLRS(weight, enginePower, crewCount, powerReserve, type, GetValidInteger("Enter rocket count: "), maxSpeed),
                         4 => new IFV(weight, enginePower, crewCount, powerReserve, type, GetValidBoolean("Has anti-tank missiles (true/false): "), maxSpeed),
-                        5 => new SPG(weight, enginePower, crewCount, powerReserve, type, GetValidDouble("Enter cannon caliber (mm): "), maxSpeed),
+                        5 => new SPG(weight, enginePower, crewCount, powerReserve, type, GetValidDouble("Enter max fire ramge (km): "), maxSpeed),
                         6 => new TankDestroyer(weight, enginePower, crewCount, powerReserve, type, GetValidDouble("Enter gun caliber (mm): "), maxSpeed),
                         7 => new AAV(weight, enginePower, crewCount, powerReserve, type, GetValidDouble("Enter water speed (km/h): "), maxSpeed),
                         8 => new ARV(weight, enginePower, crewCount, powerReserve, type, GetValidDouble("Enter towing capacity (tons): "), maxSpeed),
@@ -606,7 +606,7 @@ namespace Final.Project.Heavy.Armor.List
             }
         }
 
-        private static (double weight, double enginePower, double crewCount, double powerReserve, double maxSpeed) GetCommonParameters()
+        private static (double weight, double enginePower, double crewCount, double powerReserve, double maxSpeed) GetCommonParameters()//введення параметрів техніки
         {
             double weight = GetValidDouble("Enter weight: ");
             double enginePower = GetValidDouble("Enter engine power: ");
